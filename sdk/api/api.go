@@ -91,6 +91,16 @@ func (e Api) GetOrm() (*gorm.DB, error) {
 	return db, nil
 }
 
+// GetOrm 获取Orm DB
+func (e Api) GetOrmCustom(slug string) (*gorm.DB, error) {
+	db, err := pkg.GetOrmCustom(e.Context, slug)
+	if err != nil {
+		e.Logger.Error(http.StatusInternalServerError, err, "数据库连接获取失败")
+		return nil, err
+	}
+	return db, nil
+}
+
 // MakeOrm 设置Orm DB
 func (e *Api) MakeOrm() *Api {
 	var err error
@@ -100,6 +110,23 @@ func (e *Api) MakeOrm() *Api {
 		return e
 	}
 	db, err := pkg.GetOrm(e.Context)
+	if err != nil {
+		e.Logger.Error(http.StatusInternalServerError, err, "数据库连接获取失败")
+		e.AddError(err)
+	}
+	e.Orm = db
+	return e
+}
+
+// MakeOrm 设置Orm DB
+func (e *Api) MakeOrmCustom(slug string) *Api {
+	var err error
+	if e.Logger == nil {
+		err = errors.New("at MakeOrmCustom logger is nil")
+		e.AddError(err)
+		return e
+	}
+	db, err := pkg.GetOrmCustom(e.Context, slug)
 	if err != nil {
 		e.Logger.Error(http.StatusInternalServerError, err, "数据库连接获取失败")
 		e.AddError(err)
