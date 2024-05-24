@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-admin-team/go-admin-core/storage"
-	"github.com/go-admin-team/go-admin-core/storage/queue"
+	"github.com/kotovmak/go-admin-core/storage"
+	"github.com/kotovmak/go-admin-core/storage/queue"
 )
 
 func TestNewMemoryQueue(t *testing.T) {
