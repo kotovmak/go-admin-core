@@ -5,7 +5,7 @@ go 1.21
 toolchain go1.21.4
 
 require (
-	github.com/kotovmak/go-admin-core v1.0.2
+	github.com/kotovmak/go-admin-core v1.0.3
 	github.com/sirupsen/logrus v1.8.0
 )
 
