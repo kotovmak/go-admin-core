@@ -67,7 +67,7 @@ func TestFields(t *testing.T) {
 }
 
 func TestFile(t *testing.T) {
-	output, err := writer.NewFileWriter("testdata", "log")
+	output, err := writer.NewFileWriter()
 	if err != nil {
 		t.Errorf("logger setup error: %s", err.Error())
 	}

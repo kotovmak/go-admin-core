@@ -1,11 +1,11 @@
 package config
 
 import (
+	"time"
+
 	"github.com/go-admin-team/redisqueue/v2"
-	"github.com/go-redis/redis/v9"
 	"github.com/kotovmak/go-admin-core/storage"
 	"github.com/kotovmak/go-admin-core/storage/queue"
-	"time"
 )
 
 type Queue struct {
@@ -15,7 +15,7 @@ type Queue struct {
 }
 
 type QueueRedis struct {
-	RedisConnectOptions
+	// RedisConnectOptions
 	Producer *redisqueue.ProducerOptions
 	Consumer *redisqueue.ConsumerOptions
 }
@@ -25,7 +25,7 @@ type QueueMemory struct {
 }
 
 type QueueNSQ struct {
-	NSQOptions
+	// NSQOptions
 	ChannelPrefix string
 }
 
@@ -42,25 +42,25 @@ func (e Queue) Setup() (storage.AdapterQueue, error) {
 		e.Redis.Consumer.ReclaimInterval = e.Redis.Consumer.ReclaimInterval * time.Second
 		e.Redis.Consumer.BlockingTimeout = e.Redis.Consumer.BlockingTimeout * time.Second
 		e.Redis.Consumer.VisibilityTimeout = e.Redis.Consumer.VisibilityTimeout * time.Second
-		client := GetRedisClient()
-		if client == nil {
-			options, err := e.Redis.RedisConnectOptions.GetRedisOptions()
-			if err != nil {
-				return nil, err
-			}
-			client = redis.NewClient(options)
-			_redis = client
-		}
-		e.Redis.Producer.RedisClient = client
-		e.Redis.Consumer.RedisClient = client
+		// client := GetRedisClient()
+		// if client == nil {
+		// 	options, err := e.Redis.RedisConnectOptions.GetRedisOptions()
+		// 	if err != nil {
+		// 		return nil, err
+		// 	}
+		// 	client = redis.NewClient(options)
+		// 	_redis = client
+		// }
+		// e.Redis.Producer.RedisClient = client
+		// e.Redis.Consumer.RedisClient = client
 		return queue.NewRedis(e.Redis.Producer, e.Redis.Consumer)
 	}
-	if e.NSQ != nil {
-		cfg, err := e.NSQ.GetNSQOptions()
-		if err != nil {
-			return nil, err
-		}
-		return queue.NewNSQ(e.NSQ.Addresses, cfg, e.NSQ.ChannelPrefix)
-	}
+	// if e.NSQ != nil {
+	// cfg, err := e.NSQ.GetNSQOptions()
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// return queue.NewNSQ(e.NSQ.Addresses, cfg, e.NSQ.ChannelPrefix)
+	// }
 	return queue.NewMemory(e.Memory.PoolSize), nil
 }
